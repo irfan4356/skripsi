@@ -2,111 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Member;
+use Auth;
+use App\Guru;
+use App\Kelas;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
+use PDF;
+use App\Exports\GuruExport;
+use App\Imports\GuruImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\Controller;
 
-class MemberController extends Controller
+
+class GuruController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $members = Member::orderBy('created_at','desc')->paginate(10);
-        return view('member.index');
+        $data_guruu = \App\Guru::all();
+      return view('guru.index',['data_guruu' => $data_guruu]);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $members= Member::latest()->paginate(10);
-        return view('member.create')->withMembers($members);
+    public function tambahData(Request $request){
+        
+      Guru::create($request->all());
+      return back();
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-            'contact'=>'required|numeric|digits_between:10,15',
-        ]);
-        $members = new Member();
-        $members->name = $request->name;
-        $members->address = $request->address;
-        $members->contact = $request->contact;
-
-        $members->save();
-        return back()->withInfo('Anggota Baru Sudah Ditambahkan');
-
+    public function update(Request $request,$id){
+      $guru = Guru::find($id);
+      $guru->update($request->all());
+      return back();
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+    public function hapus($id){
+      $guru = Guru::find($id);
+      $guru->delete();
+      return back();
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-            'address' => 'required',
-            'contact'=>'required|numeric|digits_between:10,15',
-        ]);
-        $members = Member::find($id);
-        $members->name = $request->name;
-        $members->address = $request->address;
-        $members->contact = $request->contact;
-
-        $members->save();
-        return back()->withInfo('Data Anggota Sudah dirubah ');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $members = Member::find($id);
-        $members->delete();
-        return back()->withInfo('Data Anggota Sudah Dihapus');
+    public function profile($id){
+      $guru = \App\Guru::find($id);
+      return view('guru.profile',['guruu'=>$guru]);
     }
 }

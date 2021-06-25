@@ -13,4 +13,10 @@ class Guru extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function getAvatar(){
+        if(!$this->avatar){
+            return asset('adminlte/dist/img/avatar2.png');
+        }
+        return asset('images/'.$this->avatar);
+    }
 }

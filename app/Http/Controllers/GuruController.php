@@ -25,12 +25,27 @@ class GuruController extends Controller
     }
     public function tambahData(Request $request){
         
+      $user = new User;
+      $user->role = 'guru';
+      $user->name = $request->nama_guru;
+      $user->email = $request->email;
+      $user->password = bcrypt('12345678');
+      $user->remember_token = str::random(60);
+      $user->save();
+
+      $request->request->add(['user_id'=> $user->id]);
       Guru::create($request->all());
-      return back();
+      return back()->withInfo('Data Berhasil Ditambahkan');
     }
     public function update(Request $request,$id){
       $guru = Guru::find($id);
       $guru->update($request->all());
+      if($request->hasFile('avatar')){
+
+        $request->file('avatar')->move('images/',$request->file('avatar')->getClientOriginalName());
+        $siswa->avatar = $request->file('avatar')->getClientOriginalName();
+        $siswa->save();
+    }
       return back();
     }
     public function hapus($id){
@@ -40,6 +55,6 @@ class GuruController extends Controller
     }
     public function profile($id){
       $guru = \App\Guru::find($id);
-      return view('guru.profile',['guruu'=>$guru]);
+      return view('guru.profile',compact(['guru']));
     }
 }

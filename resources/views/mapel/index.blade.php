@@ -54,10 +54,10 @@
                         </div>
                         <!-- /.modal -->
                   </div>
-                <div class="col-md-12">
-                    <table id="example1" class="table table-bordered table-striped">
+                  <div class="card-body" bis_skin_checked="1">
+                    <table class="table table-bordered">
                         <thead>
-                    <tr>
+                    <tr class="bg-primary text-dark">
                         <th>No</th>
                         <th>Kode Mata Pelajaran</th>
                         <th>Nama Mata Pelajaran</th>

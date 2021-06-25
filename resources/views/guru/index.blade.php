@@ -74,6 +74,10 @@
                                 <label for="email">Email</label>
                                 <input name="email"type="text" class="form-control"/>
                                </div>
+                               <div class="form-group">
+                                <label for="alamat">Avatar</label>
+                                <input type="file" name="avatar" class="form-control">
+                               </div>
                                <div class="modal-footer justify-content-between">
                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                  <button type="submit" class="btn btn-primary">Save changes</button>
@@ -89,20 +93,20 @@
               </div>
             
             <!-- /.card-header -->
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
+            <div class="card-body" bis_skin_checked="1">
+              <table class="table table-bordered">
                     <thead>
-                        <tr>
+                        <tr class="bg-primary text-dark">
                             <th> No</th>
-                            <td>Nama</td>
-                            <td>NIP</td>
-                            <td>Jenis Kelamin</td>
-                            <td>Agama</td>
-                            <td>Telpon</td>
-                            <td>Tempat Lahir</td>
-                            <td>Tanggal Lahir</td>
-                            <td>email</td>
-                            <td>Action</td>
+                            <th>Nama</th>
+                            <th>NIP</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Agama</th>
+                            <th>Telpon</th>
+                            <th>Tempat Lahir</th>
+                            <th>Tanggal Lahir</th>
+                            <th>email</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     @foreach ($data_guruu as $data)    
@@ -177,6 +181,10 @@
                                  <div class="form-group">
                                   <label for="email">Email</label>
                                   <input name="email"type="text" class="form-control"value="{{$data->email}}"/>
+                                 </div>
+                                 <div class="form-group">
+                                  <label for="alamat">Avatar</label>
+                                  <input type="file" name="avatar" class="form-control">
                                  </div>
                                  <div class="modal-footer justify-content-between">
                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

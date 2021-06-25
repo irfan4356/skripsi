@@ -24,7 +24,17 @@ class SiswaController extends Controller
         $data_siswaa = \App\Siswa::all();
       return view('siswa.index', compact(['data_siswaa','kelass']));
     }
-    public function tambahData(Request $request){
+    public function tambahData(Request $request)
+    {
+        $user = new \App\User;
+        $user->role = 'siswa';
+        $user->name = $request->nama_siswa;
+        $user->email = $request->email;
+        $user->password = bcrypt('12345678');
+        $user->remember_token = str::random(60);
+        $user->save();
+
+        $request->request->add(['user_id'=> $user->id]);
 
         Siswa::create($request->all());
         return back();
@@ -33,6 +43,12 @@ class SiswaController extends Controller
       //dd($request->all());
       $siswa = Siswa::find($id);
       $siswa->update($request->all());
+      if($request->hasFile('avatar')){
+
+        $request->file('avatar')->move('images/',$request->file('avatar')->getClientOriginalName());
+        $siswa->avatar = $request->file('avatar')->getClientOriginalName();
+        $siswa->save();
+    }
       return back();
     }
     public function hapus($id){
@@ -43,16 +59,58 @@ class SiswaController extends Controller
     public function profile($id){
       $kelass = Kelas::all();
       $matapelajaran = Mapel::all(); 
-      $siswaa = \App\Siswa::find($id);
+      $siswa = \App\Siswa::find($id);
       $mapel = Mapel::find($id);
+      $categories = [];
+      $data =[];
       
-      return view('siswa.profile',compact(['siswaa','mapell','kelas']));
+      foreach($matapelajaran as $mp){
+        if($siswa->mapel()->wherePivot('mapel_id',$mp->id)->first()){
+            $categories[]= $mp->nama;
+            $data[]= $siswa->mapel()->wherePivot('mapel_id',$mp->id)->first()->pivot->nilai;
+        }
+    }
+      return view('siswa.profile',compact(['siswa','kelas','matapelajaran','categories','data','mapel']));
       
     }
-    public function nilai($id){
-      $siswaa = \App\Siswa::find($id); 
+    public function addnilai(Request $request, $idsiswa){
 
-      return view('siswa.nilai',compact(['siswaa','nilai']));
-    }
+      $request->validate([
+          'mapel' => 'required',
+          'nilai' => 'required|max:3'
+      ]);
+
+      $siswa=\App\Siswa::find($idsiswa);
+
+      if($siswa->mapel()->where('mapel_id',$request->mapel)->exists()){
+          return redirect('siswa/'.$idsiswa.'/profile')->withError('Data sudah ada!!');
+      }
+
+      $siswa->mapel()->attach($request->mapel,['nilai' => $request->nilai]);
+      // ['nilai'=>$request->nilai]);
+      return redirect('siswa/'.$idsiswa.'/profile')->withInfo('Data sudah ditambah');
+  }
+  public function updatenilai(Request $request,$idsiswa){
+    $siswa=\App\Siswa::find($idsiswa);
+    $siswa->mapel()->updateExistingPivot($request->mapel,['nilai' => $request->nilai]);
+    // dd($request->all());
+    return redirect('siswa/'.$idsiswa.'/profile')->withInfo('Data sudah diupdate!');
+  }
+  public function deletenilai($idsiswa, $idmapel){
+    $siswa = Siswa::find($idsiswa);
+    $siswa->mapel()->detach($idmapel);
+    return redirect()->back()->with('sukses','Data sudah dihapus');
+
+  }
+  public function profilsaya(){
     
+    return view('siswa.profilsaya');
+    
+  }
+
+  public function nilaisaya(){
+    
+    return view('siswa.nilaisaya');
+    
+  } 
 }

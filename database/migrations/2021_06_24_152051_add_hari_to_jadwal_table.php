@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMapelSiswaTable extends Migration
+class AddHariToJadwalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateMapelSiswaTable extends Migration
      */
     public function up()
     {
-        Schema::create('siswa', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('mapel_id')->unsigned();
-            $table->integer('siswa_id')->unsigned();
-            $table->integer('nilai');
-            $table->timestamps();
+        Schema::table('jadwal', function (Blueprint $table) {
+            $table->string('hari')->after('id');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateMapelSiswaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('siswa');
+        Schema::table('jadwal', function (Blueprint $table) {
+            //
+        });
     }
 }

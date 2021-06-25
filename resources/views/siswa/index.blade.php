@@ -95,9 +95,13 @@
                           </div>
                              <div class="form-group">
                               <label for="email">Email</label>
-                              <input name="email"type="text" class="form-control"/>
+                              <input name="email"type="email" class="form-control"/>
                               <div class="valid-feedback">Valid.</div>
                               <div class="invalid-feedback">e-mail tidak boleh kosong! Format e-mail salah!</div>
+                             </div>
+                             <div class="form-group">
+                              <label for="alamat">Avatar</label>
+                              <input type="file" name="avatar" class="form-control">
                              </div>
                              <div class="modal-footer justify-content-between">
                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -115,21 +119,21 @@
           
               
               <!-- /.card-header -->
-              <div class="card-body">
-                  <table id="example1" class="table table-bordered table-striped">
+              <div class="card-body" bis_skin_checked="1">
+                <table class="table table-bordered">
                       <thead>
-                          <tr>
+                          <tr class="bg-primary text-dark">
                               <th>No</th>
-                              <td>Nama</td>
-                              <td>NISN</td>
-                              <td>Jenis Kelamin</td>
-                              <td>Agama</td>
-                              <td>Tempat Lahir</td>
-                              <td>Tanggal Lahir</td>
-                              <td>Alamat</td>
-                              <td>Kelas</td>
-                              <td>Email</td>
-                              <td>Action</td>
+                              <th>Nama</th>
+                              <th>NISN</th>
+                              <th>Jenis Kelamin</th>
+                              <th>Agama</th>
+                              <th>Tempat Lahir</th>
+                              <th>Tanggal Lahir</th>
+                              <th>Alamat</th>
+                              <th>Kelas</th>
+                              <th>Email</th>
+                              <th>Action</th>
                           </tr>
                       </thead>
                       <tbody>
@@ -161,7 +165,7 @@
                                   </button>
                                 </div>
                                 <div class="modal-body">
-                                <form method="POST" action="{{route('siswa.update',$data->id)}}">
+                                <form method="POST" action="{{route('siswa.update',$data->id)}}" enctype="multipart/form-data">
                                    @csrf
                                    {{method_field('put')}}
                                    <div class="form-group">
@@ -214,10 +218,14 @@
                                       </select> 
                                       <div class="valid-feedback">Valid.</div>
                                       <div class="invalid-feedback">Kelas tidak boleh kosong!</div>
-                                  </div>
+                                    </div>
                                      <div class="form-group">
                                       <label for="email">Email</label>
-                                      <input name="email"type="text" class="form-control"value="{{$data->email}}"/>
+                                      <input name="email"type="email" class="form-control"value="{{$data->email}}"/>
+                                     </div>
+                                     <div class="form-group">
+                                      <label for="alamat">Avatar</label>
+                                      <input type="file" name="avatar" class="form-control">
                                      </div>
                                      <div class="modal-footer justify-content-between">
                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
